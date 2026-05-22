@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../core/app_breakpoints.dart';
+import '../core/app_colors.dart';
+import '../core/url_helper.dart';
 
 class HeroSection extends StatelessWidget {
   final bool isEnglish;
@@ -12,18 +14,11 @@ class HeroSection extends StatelessWidget {
     required this.onViewProjectsPressed,
   });
 
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, webOnlyWindowName: '_blank');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 900;
+    final isMobile = screenWidth < AppBreakpoints.large;
 
     const contentAlignment = CrossAxisAlignment.center;
     const textAlignment = TextAlign.center;
@@ -39,7 +34,7 @@ class HeroSection extends StatelessWidget {
             width: isMobile ? 140 : 220,
             height: isMobile ? 140 : 220,
             decoration: BoxDecoration(
-              color: colorScheme.primary.withOpacity(0.1),
+              color: colorScheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -60,7 +55,7 @@ class HeroSection extends StatelessWidget {
           isEnglish ? "Hi, I'm Camila" : "Olá, eu sou a Camila",
           style: TextStyle(
             fontSize: isMobile ? 22 : 28,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
           ),
           textAlign: textAlignment,
         ),
@@ -82,7 +77,7 @@ class HeroSection extends StatelessWidget {
             TextSpan(
               style: TextStyle(
                 fontSize: isMobile ? 16 : 18,
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 height: 1.5,
               ),
               children: [
@@ -94,11 +89,12 @@ class HeroSection extends StatelessWidget {
                 TextSpan(
                   text: "QuadCode",
                   style: const TextStyle(
-                    color: Colors.blue,
+                    color: AppColors.linkHighlight,
                     fontWeight: FontWeight.bold,
                   ),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () => _launchUrl("https://quadcode.com.br"),
+                    ..onTap = () =>
+                        launchExternalUrl("https://quadcode.com.br"),
                 ),
                 TextSpan(
                   text: isEnglish

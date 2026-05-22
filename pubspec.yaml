@@ -1,5 +1,5 @@
 name: portifolio_camila
-description: "A new Flutter project."
+description: "Portfólio profissional de Camila Vitória — Flutter Web"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -31,9 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+
   url_launcher: ^6.3.2
 
 dev_dependencies:
@@ -60,7 +58,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/my_logo.png
+    - assets/images/Icon-192.png
+    - assets/images/Icon-512.png
     - assets/images/Camila.jpg
   #   - images/a_dot_ham.jpeg
 

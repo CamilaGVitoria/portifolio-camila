@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/app_breakpoints.dart';
 
 class AboutSection extends StatelessWidget {
   final bool isEnglish;
@@ -9,7 +10,7 @@ class AboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 900;
+    final isMobile = screenWidth < AppBreakpoints.large;
 
     return Container(
       width: double.infinity,
@@ -82,7 +83,7 @@ class AboutSection extends StatelessWidget {
           title: isEnglish ? "Front-End Developer" : "Desenvolvedora Front-End",
           subtitle: "QuadCode",
           period: isEnglish ? "11/2025 - Present" : "11/2025 - Atual",
-          description: isEnglish 
+          description: isEnglish
               ? "Front-end development for Web, Desktop, and Mobile applications with a focus on modern layouts and user experience."
               : "Desenvolvimento de front-end para aplicações Web, Desktop e Mobile com foco em layouts modernos e na jornada do usuário.",
           icon: Icons.work_rounded,
@@ -90,10 +91,14 @@ class AboutSection extends StatelessWidget {
         const SizedBox(height: 24),
         _buildTimelineItem(
           context: context,
-          title: isEnglish ? "Mobile Applications Developer" : "Desenvolvedora de Aplicativos Móveis",
-          subtitle: isEnglish ? "Peki Code (Junior Enterprise)" : "Peki Code (Empresa Júnior)",
+          title: isEnglish
+              ? "Mobile Applications Developer"
+              : "Desenvolvedora de Aplicativos Móveis",
+          subtitle: isEnglish
+              ? "Peki Code (Junior Enterprise)"
+              : "Peki Code (Empresa Júnior)",
           period: "10/2024 - 02/2025",
-          description: isEnglish 
+          description: isEnglish
               ? "Focused on mobile development using the Flutter ecosystem."
               : "Atuação focada no desenvolvimento mobile utilizando o ecossistema Flutter.",
           icon: Icons.smartphone_rounded,
@@ -101,10 +106,12 @@ class AboutSection extends StatelessWidget {
         const SizedBox(height: 24),
         _buildTimelineItem(
           context: context,
-          title: isEnglish ? "Bachelor's Degree in Computer Science" : "Bacharelado em Ciência da Computação",
+          title: isEnglish
+              ? "Bachelor's Degree in Computer Science"
+              : "Bacharelado em Ciência da Computação",
           subtitle: "IF Goiano - Campus Morrinhos",
           period: isEnglish ? "02/2019 - Present" : "02/2019 - Atual",
-          description: isEnglish 
+          description: isEnglish
               ? "Solid academic background focusing on software engineering and problem-solving."
               : "Formação acadêmica sólida com foco em engenharia de software e resolução de problemas.",
           icon: Icons.school_rounded,
@@ -122,7 +129,7 @@ class AboutSection extends StatelessWidget {
     required IconData icon,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -131,7 +138,7 @@ class AboutSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.1),
+                color: colorScheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: colorScheme.primary, size: 24),
@@ -165,7 +172,7 @@ class AboutSection extends StatelessWidget {
                 description,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   height: 1.5,
                 ),
               ),
@@ -213,12 +220,22 @@ class AboutSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        _buildListTile(context, Icons.verified_rounded, "Jornada Dart", "Academia do Flutter (2025)"),
-        _buildListTile(context, Icons.verified_rounded, "Git e GitHub", "Curso em Vídeo (2026)"),
         _buildListTile(
-          context, 
-          Icons.language_rounded, 
-          isEnglish ? "English" : "Inglês", 
+          context,
+          Icons.verified_rounded,
+          "Jornada Dart",
+          "Academia do Flutter (2025)",
+        ),
+        _buildListTile(
+          context,
+          Icons.verified_rounded,
+          "Git e GitHub",
+          "Curso em Vídeo (2026)",
+        ),
+        _buildListTile(
+          context,
+          Icons.language_rounded,
+          isEnglish ? "English" : "Inglês",
           isEnglish ? "Intermediate Level" : "Nível Intermediário",
         ),
       ],
@@ -231,9 +248,7 @@ class AboutSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Text(
         label,
@@ -245,12 +260,17 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildListTile(BuildContext context, IconData icon, String title, String subtitle) {
+  Widget _buildListTile(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white.withOpacity(0.5), size: 24),
+          Icon(icon, color: Colors.white.withValues(alpha: 0.5), size: 24),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +287,7 @@ class AboutSection extends StatelessWidget {
                 subtitle,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                 ),
               ),
             ],

@@ -18,13 +18,18 @@ A aplicação foi estruturada seguindo o padrão de separação de responsabilid
 
 ```text
 lib/
- ┣ main.dart                # Inicialização do app e configuração do tema global
+ ┣ main.dart                # Inicialização do app
+ ┣ core/
+ ┃ ┣ app_colors.dart        # Constantes de cores centralizadas
+ ┃ ┣ app_breakpoints.dart   # Breakpoints responsivos
+ ┃ ┣ app_theme.dart         # Configuração do tema
+ ┃ ┗ url_helper.dart        # Utilitário para abrir links externos
  ┣ views/
  ┃ ┗ home_view.dart         # Core da SPA, gerenciamento de estado e navegação
  ┣ sections/
  ┃ ┣ hero_section.dart      # Seção de apresentação e Call to Action
  ┃ ┣ about_section.dart     # Trajetória profissional, acadêmica e competências
- ┃ ┣ projects_section.dart  # Grid estandardizado de projetos e cards dinâmicos
+ ┃ ┣ projects_section.dart  # Grid de projetos com cards interativos
  ┃ ┗ footer_section.dart    # Assinatura, informações de contato e redes
  ┗ widgets/
    ┗ animated_background.dart # Sistema interativo de partículas em CustomPaint
@@ -47,13 +52,18 @@ The application was structured following the front-end separation of concerns pa
 
 ```text
 lib/
- ┣ main.dart                # App initialization and global theme configuration
+ ┣ main.dart                # App initialization
+ ┣ core/
+ ┃ ┣ app_colors.dart        # Centralized color constants
+ ┃ ┣ app_breakpoints.dart   # Responsive breakpoints
+ ┃ ┣ app_theme.dart         # Theme configuration
+ ┃ ┗ url_helper.dart        # External URL launcher utility
  ┣ views/
  ┃ ┗ home_view.dart         # SPA core, state management, and navigation
  ┣ sections/
  ┃ ┣ hero_section.dart      # Presentation section and Call to Action
  ┃ ┣ about_section.dart     # Professional trajectory, academic background, and skills
- ┃ ┣ projects_section.dart  # Standardized project grid and dynamic cards
+ ┃ ┣ projects_section.dart  # Project grid with interactive hover cards
  ┃ ┗ footer_section.dart    # Signature, contact information, and social networks
  ┗ widgets/
    ┗ animated_background.dart # Interactive particle system using CustomPaint
