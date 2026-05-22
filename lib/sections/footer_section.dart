@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FooterSection extends StatelessWidget {
-  const FooterSection({super.key});
+  final bool isEnglish;
+
+  const FooterSection({super.key, required this.isEnglish});
 
   Future<void> _launchUrl(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -57,7 +59,7 @@ class FooterSection extends StatelessWidget {
         children: [
           Image.asset(
             'assets/images/my_logo.png',
-            height: 110,
+            height: 80,
             errorBuilder: (context, error, stackTrace) {
               return Text(
                 "< Camila />",
@@ -72,7 +74,9 @@ class FooterSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "© ${DateTime.now().year} — Desenvolvido em Flutter",
+            isEnglish 
+                ? "© ${DateTime.now().year} — Developed in Flutter"
+                : "© ${DateTime.now().year} — Desenvolvido em Flutter",
             style: TextStyle(
               color: Colors.white.withOpacity(0.4),
               fontSize: 14,
@@ -84,9 +88,9 @@ class FooterSection extends StatelessWidget {
       Column(
         crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Contato",
-            style: TextStyle(
+          Text(
+            isEnglish ? "Contact" : "Contato",
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -110,9 +114,9 @@ class FooterSection extends StatelessWidget {
       Column(
         crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Redes Sociais",
-            style: TextStyle(
+          Text(
+            isEnglish ? "Social Media" : "Redes Sociais",
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -131,7 +135,7 @@ class FooterSection extends StatelessWidget {
               _buildSocialButton(
                 icon: Icons.business_center_rounded,
                 label: "LinkedIn",
-                url: "https://www.linkedin.com/in/camilagvitoria/",
+                url: "https://www.linkedin.com",
               ),
             ],
           ),

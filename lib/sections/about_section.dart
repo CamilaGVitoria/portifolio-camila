@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({super.key});
+  final bool isEnglish;
+
+  const AboutSection({super.key, required this.isEnglish});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class AboutSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Sobre Mim & Experiência",
+                isEnglish ? "About Me & Experience" : "Sobre Mim & Experiência",
                 style: TextStyle(
                   fontSize: isMobile ? 28 : 36,
                   fontWeight: FontWeight.bold,
@@ -39,7 +41,6 @@ class AboutSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60),
-
               isMobile
                   ? Column(
                       children: [
@@ -67,9 +68,9 @@ class AboutSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Trajetória",
-          style: TextStyle(
+        Text(
+          isEnglish ? "Journey" : "Trajetória",
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -78,28 +79,34 @@ class AboutSection extends StatelessWidget {
         const SizedBox(height: 32),
         _buildTimelineItem(
           context: context,
-          title: "Desenvolvedora Front-End",
+          title: isEnglish ? "Front-End Developer" : "Desenvolvedora Front-End",
           subtitle: "QuadCode",
-          period: "11/2025 - Atual",
-          description: "Desenvolvimento de front-end para aplicações Web, Desktop e Mobile com foco em layouts modernos e na jornada do usuário.",
+          period: isEnglish ? "11/2025 - Present" : "11/2025 - Atual",
+          description: isEnglish 
+              ? "Front-end development for Web, Desktop, and Mobile applications with a focus on modern layouts and user experience."
+              : "Desenvolvimento de front-end para aplicações Web, Desktop e Mobile com foco em layouts modernos e na jornada do usuário.",
           icon: Icons.work_rounded,
         ),
         const SizedBox(height: 24),
         _buildTimelineItem(
           context: context,
-          title: "Desenvolvedora de Aplicativos Mobile",
-          subtitle: "Peki Code (Empresa Júnior)",
+          title: isEnglish ? "Mobile Applications Developer" : "Desenvolvedora de Aplicativos Móveis",
+          subtitle: isEnglish ? "Peki Code (Junior Enterprise)" : "Peki Code (Empresa Júnior)",
           period: "10/2024 - 02/2025",
-          description: "Atuação focada no desenvolvimento mobile utilizando o ecossistema Flutter.",
+          description: isEnglish 
+              ? "Focused on mobile development using the Flutter ecosystem."
+              : "Atuação focada no desenvolvimento mobile utilizando o ecossistema Flutter.",
           icon: Icons.smartphone_rounded,
         ),
         const SizedBox(height: 24),
         _buildTimelineItem(
           context: context,
-          title: "Bacharelado em Ciência da Computação",
+          title: isEnglish ? "Bachelor's Degree in Computer Science" : "Bacharelado em Ciência da Computação",
           subtitle: "IF Goiano - Campus Morrinhos",
-          period: "02/2019 - Atual",
-          description: "Formação acadêmica sólida com foco em engenharia de software e resolução de problemas.",
+          period: isEnglish ? "02/2019 - Present" : "02/2019 - Atual",
+          description: isEnglish 
+              ? "Solid academic background focusing on software engineering and problem-solving."
+              : "Formação acadêmica sólida com foco em engenharia de software e resolução de problemas.",
           icon: Icons.school_rounded,
         ),
       ],
@@ -173,9 +180,9 @@ class AboutSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Habilidades Técnicas",
-          style: TextStyle(
+        Text(
+          isEnglish ? "Technical Skills" : "Habilidades Técnicas",
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -197,9 +204,9 @@ class AboutSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 48),
-        const Text(
-          "Certificações & Idiomas",
-          style: TextStyle(
+        Text(
+          isEnglish ? "Certifications & Languages" : "Certificações & Idiomas",
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -208,7 +215,12 @@ class AboutSection extends StatelessWidget {
         const SizedBox(height: 24),
         _buildListTile(context, Icons.verified_rounded, "Jornada Dart", "Academia do Flutter (2025)"),
         _buildListTile(context, Icons.verified_rounded, "Git e GitHub", "Curso em Vídeo (2026)"),
-        _buildListTile(context, Icons.language_rounded, "Inglês", "Nível Intermediário"),
+        _buildListTile(
+          context, 
+          Icons.language_rounded, 
+          isEnglish ? "English" : "Inglês", 
+          isEnglish ? "Intermediate Level" : "Nível Intermediário",
+        ),
       ],
     );
   }

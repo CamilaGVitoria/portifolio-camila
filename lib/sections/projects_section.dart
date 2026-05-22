@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectsSection extends StatelessWidget {
-  const ProjectsSection({super.key});
+  final bool isEnglish;
+
+  const ProjectsSection({super.key, required this.isEnglish});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class ProjectsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Meus Projetos",
+            isEnglish ? "My Projects" : "Meus Projetos",
             style: TextStyle(
               fontSize: isMobile ? 28 : 36,
               fontWeight: FontWeight.bold,
@@ -46,8 +48,9 @@ class ProjectsSection extends StatelessWidget {
                 context: context,
                 isMobile: isMobile,
                 title: "BioTrack",
-                description:
-                    "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
+                description: isEnglish
+                    ? "Clinical telemonitoring platform. Full development of the front-end interface, focusing on usability and a fluid user experience."
+                    : "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
                 linkText: "biotrack.app.br",
                 url: "https://biotrack.app.br",
                 icon: Icons.health_and_safety,
@@ -55,9 +58,10 @@ class ProjectsSection extends StatelessWidget {
               _buildProjectCard(
                 context: context,
                 isMobile: isMobile,
-                title: "Nutricionista Talita Gonçalves",
-                description:
-                    "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
+                title: isEnglish ? "Nutritionist Talita Gonçalves" : "Nutricionista Talita Gonçalves",
+                description: isEnglish
+                    ? "Professional landing page developed for patient conversion, featuring a modern, responsive, and web-optimized layout."
+                    : "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
                 linkText: "talitagoncalvesnutri.com.br",
                 url: "https://www.talitagoncalvesnutri.com.br",
                 icon: Icons.restaurant_menu,
@@ -65,31 +69,33 @@ class ProjectsSection extends StatelessWidget {
               _buildProjectCard(
                 context: context,
                 isMobile: isMobile,
-                title: "Portfólio Pessoal",
-                description:
-                    "Este próprio site! Desenvolvido 100% em Flutter Web aplicando conceitos de Clean Code, responsividade e componentização.",
-                linkText: "Ver no GitHub",
+                title: isEnglish ? "Personal Portfolio" : "Portfólio Pessoal",
+                description: isEnglish
+                    ? "This very website! Developed 100% in Flutter Web applying Clean Code concepts, responsiveness, and componentization."
+                    : "Este próprio site! Desenvolvido 100% em Flutter Web aplicando conceitos de Clean Code, responsividade e componentização.",
+                linkText: isEnglish ? "View on GitHub" : "Ver no GitHub",
                 url: "https://github.com/CamilaGVitoria/portifolio-camila",
                 icon: Icons.code,
               ),
               _buildProjectCard(
                 context: context,
                 isMobile: isMobile,
-                title: "Experimentos Mobile",
-                description:
-                    "Coleção de aplicativos mobile desenvolvidos em Flutter focando na construção de layouts avançados, componentização e consumo de dados no front-end.",
-                linkText: "Ver repositório",
-                url:
-                    "https://github.com/CamilaGVitoria/apps",
+                title: isEnglish ? "Mobile Experiments" : "Experimentos Mobile",
+                description: isEnglish
+                    ? "Collection of mobile applications developed in Flutter focusing on building advanced layouts, componentization, and front-end data consumption."
+                    : "Coleção de aplicativos mobile desenvolvidos em Flutter focando na construção de layouts avançados, componentização e consumo de dados no front-end.",
+                linkText: isEnglish ? "View repository" : "Ver repositório",
+                url: "https://github.com/CamilaGVitoria/apps",
                 icon: Icons.app_shortcut_rounded,
               ),
               _buildProjectCard(
                 context: context,
                 isMobile: isMobile,
-                title: "Novas Soluções",
-                description:
-                    "Interfaces modernas e aplicações responsivas estão sendo estruturadas neste momento. O desenvolvimento não para.",
-                linkText: "Em andamento...",
+                title: isEnglish ? "New Solutions" : "Novas Soluções",
+                description: isEnglish
+                    ? "Modern interfaces and responsive applications are currently being structured. Development never stops."
+                    : "Interfaces modernas e aplicações responsivas estão sendo estruturadas neste momento. O desenvolvimento não para.",
+                linkText: isEnglish ? "In progress..." : "Em andamento...",
                 url: "",
                 icon: Icons.hourglass_top_rounded,
                 isInProgress: true,

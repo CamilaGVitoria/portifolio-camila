@@ -17,6 +17,8 @@ class _HomeViewState extends State<HomeView> {
   final GlobalKey _aboutKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
 
+  bool isEnglish = false; 
+
   void _scrollToSection(GlobalKey key) {
     if (key.currentContext != null) {
       Scrollable.ensureVisible(
@@ -63,15 +65,18 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                   ),
-                  if (!isMobile)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildMenuButton("Sobre Mim", _aboutKey),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!isMobile) ...[
+                        _buildMenuButton(isEnglish ? "About Me" : "Sobre Mim", _aboutKey),
                         const SizedBox(width: 24),
-                        _buildMenuButton("Projetos", _projectsKey),
+                        _buildMenuButton(isEnglish ? "Projects" : "Projetos", _projectsKey),
+                        const SizedBox(width: 32),
                       ],
-                    ),
+                      _buildLanguageToggle(),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -82,10 +87,16 @@ class _HomeViewState extends State<HomeView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(key: _heroKey, child: const HeroSection()),
-              Container(key: _aboutKey, child: const AboutSection()),
-              Container(key: _projectsKey, child: const ProjectsSection()),
-              const FooterSection(),
+              Container(
+                key: _heroKey, 
+                child: HeroSection(
+                  isEnglish: isEnglish,
+                  onViewProjectsPressed: () => _scrollToSection(_projectsKey),
+                ),
+              ),
+              Container(key: _aboutKey, child: AboutSection(isEnglish: isEnglish)),
+              Container(key: _projectsKey, child: ProjectsSection(isEnglish: isEnglish)),
+              FooterSection(isEnglish: isEnglish),
             ],
           ),
         ),
@@ -104,6 +115,51 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       child: Text(title),
+    );
+  }
+
+  Widget _buildLanguageToggle() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildLangOption("PT", !isEnglish),
+          _buildLangOption("EN", isEnglish),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLangOption(String lang, bool isActive) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isEnglish = lang == "EN";
+        });
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: isActive ? Colors.orange.withOpacity(0.2) : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            lang,
+            style: TextStyle(
+              color: isActive ? Colors.orange : Colors.white.withOpacity(0.5),
+              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  final bool isEnglish;
+  final VoidCallback onViewProjectsPressed;
+
+  const HeroSection({
+    super.key,
+    required this.isEnglish,
+    required this.onViewProjectsPressed,
+  });
 
   Future<void> _launchUrl(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -50,7 +57,7 @@ class HeroSection extends StatelessWidget {
       crossAxisAlignment: contentAlignment,
       children: [
         Text(
-          "Olá, eu sou a Camila",
+          isEnglish ? "Hi, I'm Camila" : "Olá, eu sou a Camila",
           style: TextStyle(
             fontSize: isMobile ? 22 : 28,
             color: Colors.white.withOpacity(0.8),
@@ -59,7 +66,7 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SelectableText(
-          "Desenvolvedora Front-end",
+          isEnglish ? "Front-end Developer" : "Desenvolvedora Front-end",
           style: TextStyle(
             fontSize: isMobile ? 36 : 56,
             fontWeight: FontWeight.bold,
@@ -79,9 +86,10 @@ class HeroSection extends StatelessWidget {
                 height: 1.5,
               ),
               children: [
-                const TextSpan(
-                  text:
-                      "Especializada em criar interfaces web e mobile fluidas e escaláveis. Co-fundadora da ",
+                TextSpan(
+                  text: isEnglish
+                      ? "Specialized in creating fluid and scalable web and mobile interfaces. Co-founder of "
+                      : "Especializada em criar interfaces web e mobile fluidas e escaláveis. Co-fundadora da ",
                 ),
                 TextSpan(
                   text: "QuadCode",
@@ -92,9 +100,10 @@ class HeroSection extends StatelessWidget {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => _launchUrl("https://quadcode.com.br"),
                 ),
-                const TextSpan(
-                  text:
-                      ", transformando ideias em experiências visuais completas.",
+                TextSpan(
+                  text: isEnglish
+                      ? ", turning ideas into complete visual experiences."
+                      : ", transformando ideias em experiências visuais completas.",
                 ),
               ],
             ),
@@ -103,7 +112,7 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 48),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: onViewProjectsPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: colorScheme.primary,
             foregroundColor: Colors.black,
@@ -115,9 +124,9 @@ class HeroSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          child: const Text(
-            "Ver meus projetos",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Text(
+            isEnglish ? "View my projects" : "Ver meus projetos",
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -145,8 +154,7 @@ class HeroSection extends StatelessWidget {
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize
-                      .min, // Garante que a linha ocupe apenas o espaço necessário
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     profileImage,
                     const SizedBox(width: 60),
