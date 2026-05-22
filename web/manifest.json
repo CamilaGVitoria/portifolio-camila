@@ -1,11 +1,11 @@
 {
-    "name": "portifolio_camila",
-    "short_name": "portifolio_camila",
+    "name": "Camila Vitória | Portfólio",
+    "short_name": "Camila Dev",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#000000",
+    "theme_color": "#FF9800",
+    "description": "Portfólio de Camila Gonçalves Vitória — Desenvolvedora Front-End especializada em Flutter, React e interfaces web modernas.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

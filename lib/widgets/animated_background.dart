@@ -10,54 +10,59 @@ class AnimatedBackground extends StatefulWidget {
   State<AnimatedBackground> createState() => _AnimatedBackgroundState();
 }
 
-class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTickerProviderStateMixin {
+class _AnimatedBackgroundState extends State<AnimatedBackground>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Listenable _repaintListenable;
   final List<_Particle> _particles = [];
   final Random _random = Random();
-  Offset _mousePosition = Offset.zero;
+  final ValueNotifier<Offset> _mousePosition = ValueNotifier(Offset.zero);
   Size _screenSize = Size.zero;
 
   @override
   void initState() {
     super.initState();
     for (int i = 0; i < 40; i++) {
-      _particles.add(_Particle(
-        x: _random.nextDouble(),
-        y: _random.nextDouble(),
-        speedX: (_random.nextDouble() - 0.5) * 0.002,
-        speedY: (_random.nextDouble() - 0.5) * 0.002,
-        radius: _random.nextDouble() * 2 + 1.5,
-        opacity: _random.nextDouble() * 0.5 + 0.2,
-      ));
+      _particles.add(
+        _Particle(
+          x: _random.nextDouble(),
+          y: _random.nextDouble(),
+          speedX: (_random.nextDouble() - 0.5) * 0.002,
+          speedY: (_random.nextDouble() - 0.5) * 0.002,
+          radius: _random.nextDouble() * 2 + 1.5,
+          opacity: _random.nextDouble() * 0.5 + 0.2,
+        ),
+      );
     }
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    )..addListener(() {
-        if (_screenSize != Size.zero) {
-          setState(() {
-            for (var particle in _particles) {
-              particle.update(_mousePosition, _screenSize);
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
+          ..addListener(() {
+            if (_screenSize != Size.zero) {
+              for (var particle in _particles) {
+                particle.update(_mousePosition.value, _screenSize);
+              }
             }
-          });
-        }
-      })..repeat();
+          })
+          ..repeat();
+
+    _repaintListenable = Listenable.merge([_controller, _mousePosition]);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _mousePosition.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     _screenSize = MediaQuery.of(context).size;
-    
+
     return MouseRegion(
-      onHover: (event) => _mousePosition = event.localPosition,
-      onExit: (event) => _mousePosition = Offset.zero,
+      onHover: (event) => _mousePosition.value = event.localPosition,
+      onExit: (event) => _mousePosition.value = Offset.zero,
       child: Stack(
         children: [
           Positioned.fill(
@@ -66,10 +71,11 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                 _particles,
                 Theme.of(context).colorScheme.primary,
                 _mousePosition,
+                repaint: _repaintListenable,
               ),
             ),
           ),
-          widget.child,
+          RepaintBoundary(child: widget.child),
         ],
       ),
     );
@@ -120,32 +126,39 @@ class _Particle {
 class _ParticlePainter extends CustomPainter {
   final List<_Particle> particles;
   final Color color;
-  final Offset mousePosition;
+  final ValueNotifier<Offset> mousePosition;
 
-  _ParticlePainter(this.particles, this.color, this.mousePosition);
+  _ParticlePainter(
+    this.particles,
+    this.color,
+    this.mousePosition, {
+    required Listenable repaint,
+  }) : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
+    final mp = mousePosition.value;
+
     for (var particle in particles) {
       final px = particle.x * size.width;
       final py = particle.y * size.height;
 
       final paint = Paint()
-        ..color = color.withOpacity(particle.opacity)
+        ..color = color.withValues(alpha: particle.opacity)
         ..style = PaintingStyle.fill;
       canvas.drawCircle(Offset(px, py), particle.radius, paint);
 
-      if (mousePosition != Offset.zero) {
-        final dx = mousePosition.dx - px;
-        final dy = mousePosition.dy - py;
+      if (mp != Offset.zero) {
+        final dx = mp.dx - px;
+        final dy = mp.dy - py;
         final distance = sqrt(dx * dx + dy * dy);
 
         if (distance < 150) {
           final lineOpacity = (1 - (distance / 150)) * particle.opacity;
           final linePaint = Paint()
-            ..color = color.withOpacity(lineOpacity)
+            ..color = color.withValues(alpha: lineOpacity)
             ..strokeWidth = 1.0;
-          canvas.drawLine(Offset(px, py), mousePosition, linePaint);
+          canvas.drawLine(Offset(px, py), mp, linePaint);
         }
       }
     }

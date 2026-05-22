@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../core/app_breakpoints.dart';
+import '../core/url_helper.dart';
 
 class ProjectsSection extends StatelessWidget {
   final bool isEnglish;
@@ -10,7 +11,7 @@ class ProjectsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
+    final isMobile = screenWidth < AppBreakpoints.small;
 
     return Container(
       width: double.infinity,
@@ -44,8 +45,7 @@ class ProjectsSection extends StatelessWidget {
             runSpacing: 24,
             alignment: WrapAlignment.center,
             children: [
-              _buildProjectCard(
-                context: context,
+              _ProjectCard(
                 isMobile: isMobile,
                 title: "BioTrack",
                 description: isEnglish
@@ -55,10 +55,11 @@ class ProjectsSection extends StatelessWidget {
                 url: "https://biotrack.app.br",
                 icon: Icons.health_and_safety,
               ),
-              _buildProjectCard(
-                context: context,
+              _ProjectCard(
                 isMobile: isMobile,
-                title: isEnglish ? "Nutritionist Talita Gonçalves" : "Nutricionista Talita Gonçalves",
+                title: isEnglish
+                    ? "Nutritionist Talita Gonçalves"
+                    : "Nutricionista Talita Gonçalves",
                 description: isEnglish
                     ? "Professional landing page developed for patient conversion, featuring a modern, responsive, and web-optimized layout."
                     : "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
@@ -66,8 +67,7 @@ class ProjectsSection extends StatelessWidget {
                 url: "https://www.talitagoncalvesnutri.com.br",
                 icon: Icons.restaurant_menu,
               ),
-              _buildProjectCard(
-                context: context,
+              _ProjectCard(
                 isMobile: isMobile,
                 title: isEnglish ? "Personal Portfolio" : "Portfólio Pessoal",
                 description: isEnglish
@@ -77,8 +77,7 @@ class ProjectsSection extends StatelessWidget {
                 url: "https://github.com/CamilaGVitoria/portifolio-camila",
                 icon: Icons.code,
               ),
-              _buildProjectCard(
-                context: context,
+              _ProjectCard(
                 isMobile: isMobile,
                 title: isEnglish ? "Mobile Experiments" : "Experimentos Mobile",
                 description: isEnglish
@@ -88,8 +87,7 @@ class ProjectsSection extends StatelessWidget {
                 url: "https://github.com/CamilaGVitoria/apps",
                 icon: Icons.app_shortcut_rounded,
               ),
-              _buildProjectCard(
-                context: context,
+              _ProjectCard(
                 isMobile: isMobile,
                 title: isEnglish ? "New Solutions" : "Novas Soluções",
                 description: isEnglish
@@ -106,96 +104,119 @@ class ProjectsSection extends StatelessWidget {
       ),
     );
   }
+}
 
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, webOnlyWindowName: '_blank');
-    } else {
-      debugPrint("Não foi possível abrir o link: $urlString");
-    }
-  }
+class _ProjectCard extends StatefulWidget {
+  final bool isMobile;
+  final String title;
+  final String description;
+  final String linkText;
+  final String url;
+  final IconData icon;
+  final bool isInProgress;
 
-  Widget _buildProjectCard({
-    required BuildContext context,
-    required bool isMobile,
-    required String title,
-    required String description,
-    required String linkText,
-    required String url,
-    required IconData icon,
-    bool isInProgress = false,
-  }) {
+  const _ProjectCard({
+    required this.isMobile,
+    required this.title,
+    required this.description,
+    required this.linkText,
+    required this.url,
+    required this.icon,
+    this.isInProgress = false,
+  });
+
+  @override
+  State<_ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<_ProjectCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final showHover = _isHovered && !widget.isInProgress;
 
-    return Opacity(
-      opacity: isInProgress ? 0.5 : 1.0,
-      child: Container(
-        width: isMobile ? double.infinity : 350,
-        height: isMobile ? null : 320,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isInProgress
-                ? colorScheme.primary.withOpacity(0.2)
-                : Colors.white.withOpacity(0.05),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Opacity(
+        opacity: widget.isInProgress ? 0.5 : 1.0,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: widget.isMobile ? double.infinity : 350,
+          height: widget.isMobile ? null : 320,
+          padding: const EdgeInsets.all(24),
+          transform: showHover
+              ? (Matrix4.identity()..translate(0.0, -4.0))
+              : Matrix4.identity(),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: showHover
+                  ? colorScheme.primary.withValues(alpha: 0.3)
+                  : widget.isInProgress
+                  ? colorScheme.primary.withValues(alpha: 0.2)
+                  : Colors.white.withValues(alpha: 0.05),
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: colorScheme.primary, size: 32),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              description,
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withOpacity(0.6),
-                height: 1.5,
-              ),
-            ),
-            if (!isMobile) const Spacer(),
-            if (isMobile) const SizedBox(height: 24),
-            GestureDetector(
-              onTap: isInProgress ? null : () => _launchUrl(url),
-              child: MouseRegion(
-                cursor: isInProgress
-                    ? SystemMouseCursors.basic
-                    : SystemMouseCursors.click,
-                child: Row(
-                  children: [
-                    Text(
-                      linkText,
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    if (!isInProgress)
-                      Icon(
-                        Icons.arrow_forward_rounded,
-                        color: colorScheme.primary,
-                        size: 16,
-                      ),
-                  ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(widget.icon, color: colorScheme.primary, size: 32),
+              const SizedBox(height: 16),
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                widget.description,
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withValues(alpha: 0.6),
+                  height: 1.5,
+                ),
+              ),
+              if (!widget.isMobile) const Spacer(),
+              if (widget.isMobile) const SizedBox(height: 24),
+              GestureDetector(
+                onTap: widget.isInProgress
+                    ? null
+                    : () => launchExternalUrl(widget.url),
+                child: MouseRegion(
+                  cursor: widget.isInProgress
+                      ? SystemMouseCursors.basic
+                      : SystemMouseCursors.click,
+                  child: Row(
+                    children: [
+                      Text(
+                        widget.linkText,
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (!widget.isInProgress)
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          color: colorScheme.primary,
+                          size: 16,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../core/app_breakpoints.dart';
+import '../core/app_colors.dart';
+import '../core/url_helper.dart';
 
 class FooterSection extends StatelessWidget {
   final bool isEnglish;
 
   const FooterSection({super.key, required this.isEnglish});
 
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, webOnlyWindowName: '_blank');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
+    final isMobile = screenWidth < AppBreakpoints.medium;
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0D0D0D),
+      color: AppColors.footerBackground,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 32 : 120,
         vertical: 80,
@@ -31,34 +26,35 @@ class FooterSection extends StatelessWidget {
           Container(
             width: double.infinity,
             height: 1,
-            color: Colors.white.withOpacity(0.05),
+            color: Colors.white.withValues(alpha: 0.05),
           ),
           const SizedBox(height: 60),
           isMobile
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: _buildFooterItems(context, colorScheme),
+                  children: _buildFooterItems(context, colorScheme, isMobile),
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildFooterItems(context, colorScheme),
+                  children: _buildFooterItems(context, colorScheme, isMobile),
                 ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildFooterItems(BuildContext context, ColorScheme colorScheme) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
-
+  List<Widget> _buildFooterItems(
+    BuildContext context,
+    ColorScheme colorScheme,
+    bool isMobile,
+  ) {
     return [
       Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/my_logo.png',
+            'assets/images/Icon-512.png',
             height: 80,
             errorBuilder: (context, error, stackTrace) {
               return Text(
@@ -74,11 +70,11 @@ class FooterSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            isEnglish 
+            isEnglish
                 ? "© ${DateTime.now().year} — Developed in Flutter"
                 : "© ${DateTime.now().year} — Desenvolvido em Flutter",
             style: TextStyle(
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 0.4),
               fontSize: 14,
             ),
           ),
@@ -86,7 +82,9 @@ class FooterSection extends StatelessWidget {
       ),
       if (isMobile) const SizedBox(height: 40),
       Column(
-        crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: isMobile
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
           Text(
             isEnglish ? "Contact" : "Contato",
@@ -112,7 +110,9 @@ class FooterSection extends StatelessWidget {
       ),
       if (isMobile) const SizedBox(height: 40),
       Column(
-        crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: isMobile
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
           Text(
             isEnglish ? "Social Media" : "Redes Sociais",
@@ -124,7 +124,9 @@ class FooterSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Column(
-            crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            crossAxisAlignment: isMobile
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               _buildSocialButton(
                 icon: Icons.code_rounded,
@@ -135,7 +137,7 @@ class FooterSection extends StatelessWidget {
               _buildSocialButton(
                 icon: Icons.business_center_rounded,
                 label: "LinkedIn",
-                url: "https://www.linkedin.com",
+                url: "https://www.linkedin.com/in/camilagvitoria/",
               ),
             ],
           ),
@@ -150,18 +152,18 @@ class FooterSection extends StatelessWidget {
     required String url,
   }) {
     return GestureDetector(
-      onTap: () => _launchUrl(url),
+      onTap: () => launchExternalUrl(url),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.orange, size: 18),
+            Icon(icon, color: AppColors.primary, size: 18),
             const SizedBox(width: 10),
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 14,
               ),
             ),
@@ -177,18 +179,18 @@ class FooterSection extends StatelessWidget {
     required String url,
   }) {
     return GestureDetector(
-      onTap: () => _launchUrl(url),
+      onTap: () => launchExternalUrl(url),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.orange, size: 18),
+            Icon(icon, color: AppColors.primary, size: 18),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),

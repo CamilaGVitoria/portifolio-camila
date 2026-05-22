@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/app_breakpoints.dart';
+import '../core/app_colors.dart';
 import '../sections/about_section.dart';
 import '../sections/footer_section.dart';
 import '../sections/hero_section.dart';
@@ -17,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
   final GlobalKey _aboutKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
 
-  bool isEnglish = false; 
+  bool isEnglish = false;
 
   void _scrollToSection(GlobalKey key) {
     if (key.currentContext != null) {
@@ -32,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
+    final isMobile = screenWidth < AppBreakpoints.medium;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,13 +52,13 @@ class _HomeViewState extends State<HomeView> {
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Image.asset(
-                        'assets/images/my_logo.png',
+                        'assets/images/Icon-192.png',
                         height: 48,
                         errorBuilder: (context, error, stackTrace) {
                           return const Text(
                             '< Camila />',
                             style: TextStyle(
-                              color: Colors.orange,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.5,
                             ),
@@ -69,9 +71,15 @@ class _HomeViewState extends State<HomeView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (!isMobile) ...[
-                        _buildMenuButton(isEnglish ? "About Me" : "Sobre Mim", _aboutKey),
+                        _buildMenuButton(
+                          isEnglish ? "About Me" : "Sobre Mim",
+                          _aboutKey,
+                        ),
                         const SizedBox(width: 24),
-                        _buildMenuButton(isEnglish ? "Projects" : "Projetos", _projectsKey),
+                        _buildMenuButton(
+                          isEnglish ? "Projects" : "Projetos",
+                          _projectsKey,
+                        ),
                         const SizedBox(width: 32),
                       ],
                       _buildLanguageToggle(),
@@ -87,15 +95,21 @@ class _HomeViewState extends State<HomeView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                key: _heroKey, 
+              KeyedSubtree(
+                key: _heroKey,
                 child: HeroSection(
                   isEnglish: isEnglish,
                   onViewProjectsPressed: () => _scrollToSection(_projectsKey),
                 ),
               ),
-              Container(key: _aboutKey, child: AboutSection(isEnglish: isEnglish)),
-              Container(key: _projectsKey, child: ProjectsSection(isEnglish: isEnglish)),
+              KeyedSubtree(
+                key: _aboutKey,
+                child: AboutSection(isEnglish: isEnglish),
+              ),
+              KeyedSubtree(
+                key: _projectsKey,
+                child: ProjectsSection(isEnglish: isEnglish),
+              ),
               FooterSection(isEnglish: isEnglish),
             ],
           ),
@@ -108,11 +122,8 @@ class _HomeViewState extends State<HomeView> {
     return TextButton(
       onPressed: () => _scrollToSection(key),
       style: TextButton.styleFrom(
-        foregroundColor: Colors.orange,
-        textStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+        foregroundColor: AppColors.primary,
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       child: Text(title),
     );
@@ -121,7 +132,7 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildLanguageToggle() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white.withOpacity(0.2)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -147,13 +158,17 @@ class _HomeViewState extends State<HomeView> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: isActive ? Colors.orange.withOpacity(0.2) : Colors.transparent,
+            color: isActive
+                ? AppColors.primary.withValues(alpha: 0.2)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             lang,
             style: TextStyle(
-              color: isActive ? Colors.orange : Colors.white.withOpacity(0.5),
+              color: isActive
+                  ? AppColors.primary
+                  : Colors.white.withValues(alpha: 0.5),
               fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
               fontSize: 14,
             ),
