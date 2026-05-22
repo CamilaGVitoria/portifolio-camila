@@ -12,19 +12,19 @@ class PortifolioCamila extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Camila | Front-end Developer',
-      debugShowCheckedModeBanner: false, // Remove a faixa de "debug" no canto
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Colors.black, // Fundo principal da aplicação
+        scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(
-          primary: Colors.orange, // Cor de destaque principal
-          secondary: Colors.orangeAccent, // Cor para detalhes secundários
-          surface: Color(0xFF1A1A1A), // Cor para cards e superfícies elevadas
+          primary: Colors.orange,
+          secondary: Colors.orangeAccent,
+          surface: Color(0xFF1A1A1A),
         ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
-          elevation: 0, // Tira a sombra padrão
+          elevation: 0,
           centerTitle: true,
         ),
       ),
