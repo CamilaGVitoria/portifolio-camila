@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../core/app_breakpoints.dart';
-import '../core/app_colors.dart';
 import '../sections/about_section.dart';
 import '../sections/footer_section.dart';
 import '../sections/hero_section.dart';
@@ -35,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < AppBreakpoints.medium;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,10 +55,10 @@ class _HomeViewState extends State<HomeView> {
                         'assets/images/Icon-192.png',
                         height: 48,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Text(
+                          return Text(
                             '< Camila />',
                             style: TextStyle(
-                              color: AppColors.primary,
+                              color: colorScheme.primary,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.5,
                             ),
@@ -82,6 +82,43 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         const SizedBox(width: 32),
                       ],
+                      if (isMobile)
+                        PopupMenuButton<GlobalKey>(
+                          icon: Icon(
+                            Icons.menu_rounded,
+                            color: colorScheme.primary,
+                          ),
+                          color: const Color(0xFF1A1A1A),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.1),
+                            ),
+                          ),
+                          onSelected: _scrollToSection,
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: _aboutKey,
+                              child: Text(
+                                isEnglish ? "About Me" : "Sobre Mim",
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: _projectsKey,
+                              child: Text(
+                                isEnglish ? "Projects" : "Projetos",
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       _buildLanguageToggle(),
                     ],
                   ),
@@ -119,10 +156,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildMenuButton(String title, GlobalKey key) {
+    final colorScheme = Theme.of(context).colorScheme;
     return TextButton(
       onPressed: () => _scrollToSection(key),
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.primary,
+        foregroundColor: colorScheme.primary,
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       child: Text(title),
@@ -146,6 +184,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildLangOption(String lang, bool isActive) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -159,7 +198,7 @@ class _HomeViewState extends State<HomeView> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: isActive
-                ? AppColors.primary.withValues(alpha: 0.2)
+                ? colorScheme.primary.withValues(alpha: 0.2)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
           ),
@@ -167,7 +206,7 @@ class _HomeViewState extends State<HomeView> {
             lang,
             style: TextStyle(
               color: isActive
-                  ? AppColors.primary
+                  ? colorScheme.primary
                   : Colors.white.withValues(alpha: 0.5),
               fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
               fontSize: 14,

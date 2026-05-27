@@ -50,6 +50,12 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _screenSize = MediaQuery.of(context).size;
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     _mousePosition.dispose();
@@ -58,8 +64,6 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
-    _screenSize = MediaQuery.of(context).size;
-
     return MouseRegion(
       onHover: (event) => _mousePosition.value = event.localPosition,
       onExit: (event) => _mousePosition.value = Offset.zero,
@@ -165,5 +169,5 @@ class _ParticlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/app_breakpoints.dart';
 import '../core/url_helper.dart';
+import '../widgets/section_underline.dart';
 
 class ProjectsSection extends StatelessWidget {
   final bool isEnglish;
@@ -9,104 +10,128 @@ class ProjectsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < AppBreakpoints.small;
+    final isMobile = screenWidth < AppBreakpoints.medium;
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 40,
+        horizontal: isMobile ? 24 : 80,
         vertical: 60,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            isEnglish ? "My Projects" : "Meus Projetos",
-            style: TextStyle(
-              fontSize: isMobile ? 28 : 36,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 60,
-            height: 4,
-            decoration: BoxDecoration(
-              color: colorScheme.primary,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 48),
-          Wrap(
-            spacing: 24,
-            runSpacing: 24,
-            alignment: WrapAlignment.center,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _ProjectCard(
-                isMobile: isMobile,
-                title: "BioTrack",
-                description: isEnglish
-                    ? "Clinical telemonitoring platform. Full development of the front-end interface, focusing on usability and a fluid user experience."
-                    : "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
-                linkText: "biotrack.app.br",
-                url: "https://biotrack.app.br",
-                icon: Icons.health_and_safety,
+              Text(
+                isEnglish ? "My Projects" : "Meus Projetos",
+                style: TextStyle(
+                  fontSize: isMobile ? 28 : 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              _ProjectCard(
-                isMobile: isMobile,
-                title: isEnglish
-                    ? "Nutritionist Talita Gonçalves"
-                    : "Nutricionista Talita Gonçalves",
-                description: isEnglish
-                    ? "Professional landing page developed for patient conversion, featuring a modern, responsive, and web-optimized layout."
-                    : "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
-                linkText: "talitagoncalvesnutri.com.br",
-                url: "https://www.talitagoncalvesnutri.com.br",
-                icon: Icons.restaurant_menu,
-              ),
-              _ProjectCard(
-                isMobile: isMobile,
-                title: isEnglish ? "Personal Portfolio" : "Portfólio Pessoal",
-                description: isEnglish
-                    ? "This very website! Developed 100% in Flutter Web applying Clean Code concepts, responsiveness, and componentization."
-                    : "Este próprio site! Desenvolvido 100% em Flutter Web aplicando conceitos de Clean Code, responsividade e componentização.",
-                linkText: isEnglish ? "View on GitHub" : "Ver no GitHub",
-                url: "https://github.com/CamilaGVitoria/portifolio-camila",
-                icon: Icons.code,
-              ),
-              _ProjectCard(
-                isMobile: isMobile,
-                title: isEnglish ? "Mobile Experiments" : "Experimentos Mobile",
-                description: isEnglish
-                    ? "Collection of mobile applications developed in Flutter focusing on building advanced layouts, componentization, and front-end data consumption."
-                    : "Coleção de aplicativos mobile desenvolvidos em Flutter focando na construção de layouts avançados, componentização e consumo de dados no front-end.",
-                linkText: isEnglish ? "View repository" : "Ver repositório",
-                url: "https://github.com/CamilaGVitoria/apps",
-                icon: Icons.app_shortcut_rounded,
-              ),
-              _ProjectCard(
-                isMobile: isMobile,
-                title: isEnglish ? "New Solutions" : "Novas Soluções",
-                description: isEnglish
-                    ? "Modern interfaces and responsive applications are currently being structured. Development never stops."
-                    : "Interfaces modernas e aplicações responsivas estão sendo estruturadas neste momento. O desenvolvimento não para.",
-                linkText: isEnglish ? "In progress..." : "Em andamento...",
-                url: "",
-                icon: Icons.hourglass_top_rounded,
-                isInProgress: true,
+              const SizedBox(height: 8),
+              const SectionUnderline(),
+              const SizedBox(height: 48),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final availableWidth = constraints.maxWidth;
+                  const spacing = 24.0;
+                  int columns = (availableWidth / 350).floor().clamp(1, 3);
+                  final cardWidth =
+                      (availableWidth - (spacing * (columns - 1))) / columns;
+
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
+                        title: "BioTrack",
+                        description: isEnglish
+                            ? "Clinical telemonitoring platform. Full development of the front-end interface, focusing on usability and a fluid user experience."
+                            : "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
+                        linkText: "biotrack.app.br",
+                        url: "https://biotrack.app.br",
+                        icon: Icons.health_and_safety,
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
+                        title: isEnglish
+                            ? "Nutritionist Talita Gonçalves"
+                            : "Nutricionista Talita Gonçalves",
+                        description: isEnglish
+                            ? "Professional landing page developed for patient conversion, featuring a modern, responsive, and web-optimized layout."
+                            : "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
+                        linkText: "talitagoncalvesnutri.com.br",
+                        url: "https://www.talitagoncalvesnutri.com.br",
+                        icon: Icons.restaurant_menu,
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
+                        title: isEnglish
+                            ? "Personal Portfolio"
+                            : "Portfólio Pessoal",
+                        description: isEnglish
+                            ? "This very website! Developed 100% in Flutter Web applying Clean Code concepts, responsiveness, and componentization."
+                            : "Este próprio site! Desenvolvido 100% em Flutter Web aplicando conceitos de Clean Code, responsividade e componentização.",
+                        linkText: isEnglish
+                            ? "View on GitHub"
+                            : "Ver no GitHub",
+                        url:
+                            "https://github.com/CamilaGVitoria/portifolio-camila",
+                        icon: Icons.code,
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
+                        title: isEnglish
+                            ? "Mobile Experiments"
+                            : "Experimentos Mobile",
+                        description: isEnglish
+                            ? "Collection of mobile applications developed in Flutter focusing on building advanced layouts, componentization, and front-end data consumption."
+                            : "Coleção de aplicativos mobile desenvolvidos em Flutter focando na construção de layouts avançados, componentização e consumo de dados no front-end.",
+                        linkText: isEnglish
+                            ? "View repository"
+                            : "Ver repositório",
+                        url: "https://github.com/CamilaGVitoria/apps",
+                        icon: Icons.app_shortcut_rounded,
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
+                        title: isEnglish ? "New Solutions" : "Novas Soluções",
+                        description: isEnglish
+                            ? "Modern interfaces and responsive applications are currently being structured. Development never stops."
+                            : "Interfaces modernas e aplicações responsivas estão sendo estruturadas neste momento. O desenvolvimento não para.",
+                        linkText: isEnglish
+                            ? "In progress..."
+                            : "Em andamento...",
+                        url: "",
+                        icon: Icons.hourglass_top_rounded,
+                        isInProgress: true,
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
 class _ProjectCard extends StatefulWidget {
+  final double cardWidth;
   final bool isMobile;
   final String title;
   final String description;
@@ -116,6 +141,7 @@ class _ProjectCard extends StatefulWidget {
   final bool isInProgress;
 
   const _ProjectCard({
+    required this.cardWidth,
     required this.isMobile,
     required this.title,
     required this.description,
@@ -144,11 +170,11 @@ class _ProjectCardState extends State<_ProjectCard> {
         opacity: widget.isInProgress ? 0.5 : 1.0,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: widget.isMobile ? double.infinity : 350,
+          width: widget.isMobile ? double.infinity : widget.cardWidth,
           height: widget.isMobile ? null : 320,
           padding: const EdgeInsets.all(24),
           transform: showHover
-              ? (Matrix4.identity()..translate(0.0, -4.0))
+              ? Matrix4.translationValues(0.0, -4.0, 0.0)
               : Matrix4.identity(),
           decoration: BoxDecoration(
             color: colorScheme.surface,
@@ -187,31 +213,37 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
               if (!widget.isMobile) const Spacer(),
               if (widget.isMobile) const SizedBox(height: 24),
-              GestureDetector(
-                onTap: widget.isInProgress
-                    ? null
-                    : () => launchExternalUrl(widget.url),
-                child: MouseRegion(
-                  cursor: widget.isInProgress
-                      ? SystemMouseCursors.basic
-                      : SystemMouseCursors.click,
-                  child: Row(
-                    children: [
-                      Text(
-                        widget.linkText,
-                        style: TextStyle(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+              Semantics(
+                label: widget.isInProgress
+                    ? widget.linkText
+                    : 'Abrir ${widget.title}',
+                button: !widget.isInProgress,
+                child: GestureDetector(
+                  onTap: widget.isInProgress
+                      ? null
+                      : () => launchExternalUrl(widget.url),
+                  child: MouseRegion(
+                    cursor: widget.isInProgress
+                        ? SystemMouseCursors.basic
+                        : SystemMouseCursors.click,
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.linkText,
+                          style: TextStyle(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      if (!widget.isInProgress)
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          color: colorScheme.primary,
-                          size: 16,
-                        ),
-                    ],
+                        const SizedBox(width: 8),
+                        if (!widget.isInProgress)
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            color: colorScheme.primary,
+                            size: 16,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),

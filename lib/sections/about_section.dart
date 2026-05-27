@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/app_breakpoints.dart';
+import '../widgets/section_underline.dart';
 
 class AboutSection extends StatelessWidget {
   final bool isEnglish;
@@ -8,9 +9,8 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < AppBreakpoints.large;
+    final isMobile = screenWidth < AppBreakpoints.medium;
 
     return Container(
       width: double.infinity,
@@ -33,14 +33,7 @@ class AboutSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Container(
-                width: 60,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+              const SectionUnderline(),
               const SizedBox(height: 60),
               isMobile
                   ? Column(

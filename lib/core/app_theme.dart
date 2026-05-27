@@ -10,6 +10,7 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
+      tertiary: AppColors.linkHighlight,
       surface: AppColors.surface,
     ),
     useMaterial3: true,
