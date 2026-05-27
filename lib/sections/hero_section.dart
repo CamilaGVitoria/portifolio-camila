@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../core/app_breakpoints.dart';
-import '../core/app_colors.dart';
 import '../core/url_helper.dart';
 
-class HeroSection extends StatelessWidget {
+class HeroSection extends StatefulWidget {
   final bool isEnglish;
   final VoidCallback onViewProjectsPressed;
 
@@ -15,10 +14,30 @@ class HeroSection extends StatelessWidget {
   });
 
   @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection> {
+  late final TapGestureRecognizer _quadCodeRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _quadCodeRecognizer = TapGestureRecognizer()
+      ..onTap = () => launchExternalUrl("https://quadcode.com.br");
+  }
+
+  @override
+  void dispose() {
+    _quadCodeRecognizer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < AppBreakpoints.large;
+    final isMobile = screenWidth < AppBreakpoints.medium;
 
     const contentAlignment = CrossAxisAlignment.center;
     const textAlignment = TextAlign.center;
@@ -52,7 +71,7 @@ class HeroSection extends StatelessWidget {
       crossAxisAlignment: contentAlignment,
       children: [
         Text(
-          isEnglish ? "Hi, I'm Camila" : "Olá, eu sou a Camila",
+          widget.isEnglish ? "Hi, I'm Camila" : "Olá, eu sou a Camila",
           style: TextStyle(
             fontSize: isMobile ? 22 : 28,
             color: Colors.white.withValues(alpha: 0.8),
@@ -61,7 +80,7 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SelectableText(
-          isEnglish ? "Front-end Developer" : "Desenvolvedora Front-end",
+          widget.isEnglish ? "Front-end Developer" : "Desenvolvedora Front-end",
           style: TextStyle(
             fontSize: isMobile ? 36 : 56,
             fontWeight: FontWeight.bold,
@@ -82,22 +101,20 @@ class HeroSection extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: isEnglish
+                  text: widget.isEnglish
                       ? "Specialized in creating fluid and scalable web and mobile interfaces. Co-founder of "
                       : "Especializada em criar interfaces web e mobile fluidas e escaláveis. Co-fundadora da ",
                 ),
                 TextSpan(
                   text: "QuadCode",
-                  style: const TextStyle(
-                    color: AppColors.linkHighlight,
+                  style: TextStyle(
+                    color: colorScheme.tertiary,
                     fontWeight: FontWeight.bold,
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () =>
-                        launchExternalUrl("https://quadcode.com.br"),
+                  recognizer: _quadCodeRecognizer,
                 ),
                 TextSpan(
-                  text: isEnglish
+                  text: widget.isEnglish
                       ? ", turning ideas into complete visual experiences."
                       : ", transformando ideias em experiências visuais completas.",
                 ),
@@ -108,7 +125,7 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 48),
         ElevatedButton(
-          onPressed: onViewProjectsPressed,
+          onPressed: widget.onViewProjectsPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: colorScheme.primary,
             foregroundColor: Colors.black,
@@ -121,7 +138,7 @@ class HeroSection extends StatelessWidget {
             ),
           ),
           child: Text(
-            isEnglish ? "View my projects" : "Ver meus projetos",
+            widget.isEnglish ? "View my projects" : "Ver meus projetos",
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../core/app_breakpoints.dart';
-import '../core/app_colors.dart';
 import '../core/url_helper.dart';
 
 class FooterSection extends StatelessWidget {
   final bool isEnglish;
 
   const FooterSection({super.key, required this.isEnglish});
+
+  static final int _currentYear = DateTime.now().year;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class FooterSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.footerBackground,
+      color: const Color(0xFF0D0D0D),
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 32 : 120,
         vertical: 80,
@@ -71,8 +72,8 @@ class FooterSection extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             isEnglish
-                ? "© ${DateTime.now().year} — Developed in Flutter"
-                : "© ${DateTime.now().year} — Desenvolvido em Flutter",
+                ? "© $_currentYear — Developed in Flutter"
+                : "© $_currentYear — Desenvolvido em Flutter",
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.4),
               fontSize: 14,
@@ -96,12 +97,14 @@ class FooterSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildContactItem(
+            colorScheme: colorScheme,
             icon: Icons.email_rounded,
             label: "camilagvitoria.dev@gmail.com",
             url: "mailto:camilagvitoria.dev@gmail.com",
           ),
           const SizedBox(height: 12),
           _buildContactItem(
+            colorScheme: colorScheme,
             icon: Icons.phone_rounded,
             label: "(62) 98427-3832",
             url: "tel:+5562984273832",
@@ -129,12 +132,14 @@ class FooterSection extends StatelessWidget {
                 : CrossAxisAlignment.start,
             children: [
               _buildSocialButton(
+                colorScheme: colorScheme,
                 icon: Icons.code_rounded,
                 label: "GitHub",
                 url: "https://github.com/CamilaGVitoria",
               ),
               const SizedBox(height: 12),
               _buildSocialButton(
+                colorScheme: colorScheme,
                 icon: Icons.business_center_rounded,
                 label: "LinkedIn",
                 url: "https://www.linkedin.com/in/camilagvitoria/",
@@ -147,55 +152,65 @@ class FooterSection extends StatelessWidget {
   }
 
   Widget _buildContactItem({
+    required ColorScheme colorScheme,
     required IconData icon,
     required String label,
     required String url,
   }) {
-    return GestureDetector(
-      onTap: () => launchExternalUrl(url),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: AppColors.primary, size: 18),
-            const SizedBox(width: 10),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.6),
-                fontSize: 14,
+    return Semantics(
+      label: label,
+      button: true,
+      child: GestureDetector(
+        onTap: () => launchExternalUrl(url),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: colorScheme.primary, size: 18),
+              const SizedBox(width: 10),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 14,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSocialButton({
+    required ColorScheme colorScheme,
     required IconData icon,
     required String label,
     required String url,
   }) {
-    return GestureDetector(
-      onTap: () => launchExternalUrl(url),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: AppColors.primary, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.6),
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+    return Semantics(
+      label: 'Abrir $label',
+      button: true,
+      child: GestureDetector(
+        onTap: () => launchExternalUrl(url),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: colorScheme.primary, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
