@@ -52,12 +52,12 @@ class ProjectsSection extends StatelessWidget {
                       _ProjectCard(
                         cardWidth: cardWidth,
                         isMobile: columns == 1,
-                        title: "BioTrack",
+                        title: "TrackFlow",
                         description: isEnglish
                             ? "Clinical telemonitoring platform. Full development of the front-end interface, focusing on usability and a fluid user experience."
                             : "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
-                        linkText: "biotrack.app.br",
-                        url: "https://biotrack.app.br",
+                        linkText: "trackflow.net.br",
+                        url: "https://trackflow.net.br",
                         icon: Icons.health_and_safety,
                       ),
                       _ProjectCard(
