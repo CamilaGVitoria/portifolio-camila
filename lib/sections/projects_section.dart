@@ -107,6 +107,29 @@ class ProjectsSection extends StatelessWidget {
                       _ProjectCard(
                         cardWidth: cardWidth,
                         isMobile: columns == 1,
+                        title: "MCU Collector",
+                        description: isEnglish
+                            ? "Web and mobile app that turns the passion for Marvel into an interactive sticker album. Track, organize, and complete a digital collection of MCU characters."
+                            : "Aplicação web e mobile que transforma a paixão pela Marvel em um álbum de figurinhas interativo. Rastreie, organize e complete sua coleção digital de personagens do MCU.",
+                        icon: Icons.stars_outlined,
+                        links: [
+                          MapEntry(
+                            "GitHub",
+                            "https://github.com/CamilaGVitoria/mcu_collector",
+                          ),
+                          MapEntry(
+                            isEnglish ? "Website" : "Site Web",
+                            "https://mcu-collector.netlify.app",
+                          ),
+                          MapEntry(
+                            "Download APK",
+                            "https://github.com/CamilaGVitoria/mcu_collector/releases/tag/v1.0.0",
+                          ),
+                        ],
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
                         title: isEnglish ? "New Solutions" : "Novas Soluções",
                         description: isEnglish
                             ? "Modern interfaces and responsive applications are currently being structured. Development never stops."
@@ -139,16 +162,18 @@ class _ProjectCard extends StatefulWidget {
   final String url;
   final IconData icon;
   final bool isInProgress;
+  final List<MapEntry<String, String>>? links;
 
   const _ProjectCard({
     required this.cardWidth,
     required this.isMobile,
     required this.title,
     required this.description,
-    required this.linkText,
-    required this.url,
+    this.linkText = '',
+    this.url = '',
     required this.icon,
     this.isInProgress = false,
+    this.links,
   });
 
   @override
@@ -213,40 +238,85 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
               if (!widget.isMobile) const Spacer(),
               if (widget.isMobile) const SizedBox(height: 24),
-              Semantics(
-                label: widget.isInProgress
-                    ? widget.linkText
-                    : 'Abrir ${widget.title}',
-                button: !widget.isInProgress,
-                child: GestureDetector(
-                  onTap: widget.isInProgress
-                      ? null
-                      : () => launchExternalUrl(widget.url),
-                  child: MouseRegion(
-                    cursor: widget.isInProgress
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.linkText,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.bold,
+              if (widget.links != null)
+                ...widget.links!.map(
+                  (link) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Semantics(
+                      label: 'Abrir ${link.key}',
+                      button: true,
+                      child: GestureDetector(
+                        onTap: () => launchExternalUrl(link.value),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Row(
+                            children: [
+                              Icon(
+                                link.key.contains('GitHub')
+                                    ? Icons.code
+                                    : link.key.contains('Download') || link.key.contains('APK')
+                                        ? Icons.download_rounded
+                                        : Icons.language,
+                                color: colorScheme.primary,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                link.key,
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(
+                                Icons.arrow_forward_rounded,
+                                color: colorScheme.primary,
+                                size: 14,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        if (!widget.isInProgress)
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            color: colorScheme.primary,
-                            size: 16,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Semantics(
+                  label: widget.isInProgress
+                      ? widget.linkText
+                      : 'Abrir ${widget.title}',
+                  button: !widget.isInProgress,
+                  child: GestureDetector(
+                    onTap: widget.isInProgress
+                        ? null
+                        : () => launchExternalUrl(widget.url),
+                    child: MouseRegion(
+                      cursor: widget.isInProgress
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.linkText,
+                            style: TextStyle(
+                              color: colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                      ],
+                          const SizedBox(width: 8),
+                          if (!widget.isInProgress)
+                            Icon(
+                              Icons.arrow_forward_rounded,
+                              color: colorScheme.primary,
+                              size: 16,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
