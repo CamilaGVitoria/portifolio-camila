@@ -102,21 +102,8 @@ class _HeroSectionState extends State<HeroSection> {
               children: [
                 TextSpan(
                   text: widget.isEnglish
-                      ? "Specialized in creating fluid and scalable web and mobile interfaces. Co-founder of "
-                      : "Especializada em criar interfaces web e mobile fluidas e escaláveis. Co-fundadora da ",
-                ),
-                TextSpan(
-                  text: "QuadCode",
-                  style: TextStyle(
-                    color: colorScheme.tertiary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  recognizer: _quadCodeRecognizer,
-                ),
-                TextSpan(
-                  text: widget.isEnglish
-                      ? ", turning ideas into complete visual experiences."
-                      : ", transformando ideias em experiências visuais completas.",
+                      ? "Specialized in creating fluid and scalable web and mobile interfaces. Focused on delivering high performance and the best user experience."
+                      : "Especializada em criar interfaces web e mobile fluidas e escaláveis. Focada em entregar alto desempenho e a melhor experiência para o usuário.",
                 ),
               ],
             ),
