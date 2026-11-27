@@ -130,6 +130,20 @@ class ProjectsSection extends StatelessWidget {
                       _ProjectCard(
                         cardWidth: cardWidth,
                         isMobile: columns == 1,
+                        title: isEnglish
+                            ? "Landing Page — Front-end Challenge"
+                            : "Landing Page — Desafio Front-end",
+                        description: isEnglish
+                            ? "Project developed as a Front-end technical challenge, using fictional data and visual identity for study and portfolio purposes."
+                            : "Projeto desenvolvido como desafio técnico de Front-end, utilizando dados e identidade visual fictícios para fins de estudo e portfólio.",
+                        linkText: isEnglish ? "View Website" : "Acessar site",
+                        url:
+                            "https://desafio-frontend-camila-goncalves.netlify.app",
+                        icon: Icons.web_rounded,
+                      ),
+                      _ProjectCard(
+                        cardWidth: cardWidth,
+                        isMobile: columns == 1,
                         title: isEnglish ? "New Solutions" : "Novas Soluções",
                         description: isEnglish
                             ? "Modern interfaces and responsive applications are currently being structured. Development never stops."
