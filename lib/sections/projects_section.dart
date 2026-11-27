@@ -58,6 +58,7 @@ class ProjectsSection extends StatelessWidget {
                             : "Plataforma de telemonitoramento clínico. Desenvolvimento completo da interface front-end, focando em usabilidade e experiência fluida para os usuários.",
                         linkText: "trackflow.net.br",
                         url: "https://trackflow.net.br",
+                        previewImage: "assets/images/projects/trackflow.jpg",
                         icon: Icons.health_and_safety,
                       ),
                       _ProjectCard(
@@ -71,6 +72,7 @@ class ProjectsSection extends StatelessWidget {
                             : "Landing page profissional desenvolvida para conversão de pacientes, com layout moderno, responsivo e otimizado para a web.",
                         linkText: "talitagoncalvesnutri.com.br",
                         url: "https://www.talitagoncalvesnutri.com.br",
+                        previewImage: "assets/images/projects/talita.jpg",
                         icon: Icons.restaurant_menu,
                       ),
                       _ProjectCard(
@@ -112,6 +114,8 @@ class ProjectsSection extends StatelessWidget {
                             ? "Web and mobile app that turns the passion for Marvel into an interactive sticker album. Track, organize, and complete a digital collection of MCU characters."
                             : "Aplicação web e mobile que transforma a paixão pela Marvel em um álbum de figurinhas interativo. Rastreie, organize e complete sua coleção digital de personagens do MCU.",
                         icon: Icons.stars_outlined,
+                        previewImage:
+                            "assets/images/projects/mcu_collector.jpg",
                         links: [
                           MapEntry(
                             "GitHub",
@@ -140,6 +144,8 @@ class ProjectsSection extends StatelessWidget {
                         url:
                             "https://desafio-frontend-camila-goncalves.netlify.app",
                         icon: Icons.web_rounded,
+                        previewImage:
+                            "assets/images/projects/desafio_frontend.jpg",
                       ),
                       _ProjectCard(
                         cardWidth: cardWidth,
@@ -177,6 +183,7 @@ class _ProjectCard extends StatefulWidget {
   final IconData icon;
   final bool isInProgress;
   final List<MapEntry<String, String>>? links;
+  final String? previewImage;
 
   const _ProjectCard({
     required this.cardWidth,
@@ -188,6 +195,7 @@ class _ProjectCard extends StatefulWidget {
     required this.icon,
     this.isInProgress = false,
     this.links,
+    this.previewImage,
   });
 
   @override
@@ -210,8 +218,8 @@ class _ProjectCardState extends State<_ProjectCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           width: widget.isMobile ? double.infinity : widget.cardWidth,
-          height: widget.isMobile ? null : 320,
-          padding: const EdgeInsets.all(24),
+          height: widget.isMobile ? null : 400,
+          clipBehavior: Clip.antiAlias,
           transform: showHover
               ? Matrix4.translationValues(0.0, -4.0, 0.0)
               : Matrix4.identity(),
@@ -227,113 +235,193 @@ class _ProjectCardState extends State<_ProjectCard> {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(widget.icon, color: colorScheme.primary, size: 32),
-              const SizedBox(height: 16),
-              Text(
-                widget.title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                widget.description,
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.6),
-                  height: 1.5,
-                ),
-              ),
-              if (!widget.isMobile) const Spacer(),
-              if (widget.isMobile) const SizedBox(height: 24),
-              if (widget.links != null)
-                ...widget.links!.map(
-                  (link) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Semantics(
-                      label: 'Abrir ${link.key}',
-                      button: true,
-                      child: GestureDetector(
-                        onTap: () => launchExternalUrl(link.value),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Row(
-                            children: [
-                              Icon(
-                                link.key.contains('GitHub')
-                                    ? Icons.code
-                                    : link.key.contains('Download') || link.key.contains('APK')
-                                        ? Icons.download_rounded
-                                        : Icons.language,
-                                color: colorScheme.primary,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                link.key,
-                                style: TextStyle(
-                                  color: colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                color: colorScheme.primary,
-                                size: 14,
-                              ),
-                            ],
-                          ),
+              _buildHeader(colorScheme, showHover),
+              _expandIfDesktop(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.description,
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withValues(alpha: 0.6),
+                          height: 1.5,
                         ),
                       ),
-                    ),
-                  ),
-                )
-              else
-                Semantics(
-                  label: widget.isInProgress
-                      ? widget.linkText
-                      : 'Abrir ${widget.title}',
-                  button: !widget.isInProgress,
-                  child: GestureDetector(
-                    onTap: widget.isInProgress
-                        ? null
-                        : () => launchExternalUrl(widget.url),
-                    child: MouseRegion(
-                      cursor: widget.isInProgress
-                          ? SystemMouseCursors.basic
-                          : SystemMouseCursors.click,
-                      child: Row(
-                        children: [
-                          Text(
-                            widget.linkText,
-                            style: TextStyle(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.bold,
+                      if (!widget.isMobile) const Spacer(),
+                      if (widget.isMobile) const SizedBox(height: 24),
+                      if (widget.links != null)
+                        ...widget.links!.map(
+                          (link) => Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Semantics(
+                              label: 'Abrir ${link.key}',
+                              button: true,
+                              child: GestureDetector(
+                                onTap: () => launchExternalUrl(link.value),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        link.key.contains('GitHub')
+                                            ? Icons.code
+                                            : link.key.contains('Download') ||
+                                                  link.key.contains('APK')
+                                            ? Icons.download_rounded
+                                            : Icons.language,
+                                        color: colorScheme.primary,
+                                        size: 14,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        link.key,
+                                        style: TextStyle(
+                                          color: colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Icon(
+                                        Icons.arrow_forward_rounded,
+                                        color: colorScheme.primary,
+                                        size: 14,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          if (!widget.isInProgress)
-                            Icon(
-                              Icons.arrow_forward_rounded,
-                              color: colorScheme.primary,
-                              size: 16,
+                        )
+                      else
+                        Semantics(
+                          label: widget.isInProgress
+                              ? widget.linkText
+                              : 'Abrir ${widget.title}',
+                          button: !widget.isInProgress,
+                          child: GestureDetector(
+                            onTap: widget.isInProgress
+                                ? null
+                                : () => launchExternalUrl(widget.url),
+                            child: MouseRegion(
+                              cursor: widget.isInProgress
+                                  ? SystemMouseCursors.basic
+                                  : SystemMouseCursors.click,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    widget.linkText,
+                                    style: TextStyle(
+                                      color: colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  if (!widget.isInProgress)
+                                    Icon(
+                                      Icons.arrow_forward_rounded,
+                                      color: colorScheme.primary,
+                                      size: 16,
+                                    ),
+                                ],
+                              ),
                             ),
-                        ],
-                      ),
-                    ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _expandIfDesktop(Widget child) =>
+      widget.isMobile ? child : Expanded(child: child);
+
+  Widget _buildHeader(ColorScheme colorScheme, bool showHover) {
+    return SizedBox(
+      height: 150,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (widget.previewImage != null)
+            AnimatedScale(
+              scale: showHover ? 1.06 : 1.0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+              child: Image.asset(
+                widget.previewImage!,
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+                filterQuality: FilterQuality.medium,
+                semanticLabel: 'Preview de ${widget.title}',
+              ),
+            )
+          else
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    colorScheme.primary.withValues(alpha: 0.18),
+                    colorScheme.surface,
+                  ],
+                ),
+              ),
+            ),
+          // Overlay para garantir legibilidade do ícone e título
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.55, 1.0],
+                colors: [
+                  Colors.black.withValues(alpha: 0.1),
+                  colorScheme.surface.withValues(alpha: 0.7),
+                  colorScheme.surface,
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: 24,
+            right: 24,
+            bottom: 8,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(widget.icon, color: colorScheme.primary, size: 32),
+                const SizedBox(height: 10),
+                Text(
+                  widget.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [Shadow(color: Colors.black54, blurRadius: 8)],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
